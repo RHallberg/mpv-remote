@@ -105,9 +105,21 @@
   </div>
 
   <script>
-    document.getElementById("videoUrlForm").addEventListener("submit", (event) => {
+    document.getElementById("videoUrlForm").addEventListener("submit", async (event) => {
       event.preventDefault();
-      console.log("Submitted:", document.getElementById("input").value);
+
+      const url = document.getElementById("input").value;
+
+      const response = await fetch("/loadurl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await response.json();
+      console.log(data);
     });
 
     document.getElementById("playPause").addEventListener("click", () => {
