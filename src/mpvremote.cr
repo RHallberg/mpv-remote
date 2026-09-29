@@ -22,10 +22,26 @@ post "/loadurl" do |env|
 
     puts "URL posted: #{uri}"
     # TODO: Post uri to mpv through unix socket
+    {result: "ok"}.to_json
 
   rescue URI::Error
     next respond_with_error(env, 400, "Invalid uri")
   end
+end
+
+post "/play-pause" do
+  # TODO
+  puts "Play pause"
+end
+
+post "/vol-up" do
+  # TODO
+  puts "Volume up"
+end
+
+post "/vol-down" do
+  # TODO
+  puts "Volume up"
 end
 
 

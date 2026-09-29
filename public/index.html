@@ -122,16 +122,19 @@
       console.log(data);
     });
 
-    document.getElementById("playPause").addEventListener("click", () => {
+    document.getElementById("playPause").addEventListener("click", async () => {
       console.log("Play/Pause");
+      const response = await fetch("/play-pause", { method: "POST" });
     });
 
-    document.getElementById("volUp").addEventListener("click", () => {
+    document.getElementById("volUp").addEventListener("click", async () => {
       console.log("Volume up");
+      const response = await fetch("/vol-up", { method: "POST" });
     });
 
-    document.getElementById("volDown").addEventListener("click", () => {
+    document.getElementById("volDown").addEventListener("click", async () => {
       console.log("Volume down");
+      const response = await fetch("/vol-down", { method: "POST" });
     });
   </script>
 </body>
