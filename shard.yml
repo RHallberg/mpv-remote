@@ -1,0 +1,17 @@
+name: mpvremote
+version: 0.1.0
+
+authors:
+  - RHallberg <hallbergrickard@hotmail.com>
+
+targets:
+  mpvremote:
+    main: src/mpvremote.cr
+
+crystal: '>= 1.21.0'
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
+license: MIT
