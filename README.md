@@ -2,7 +2,12 @@
 
 Simple mpv remote. Runs an idle mpv session and plays whatever url you send it via ytdlp.
 
-## Installation
+## Building
+
+Prerequisites: 
+* crystal
+
+## Running
 
 Prerequisites:
 * mpv
