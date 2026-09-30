@@ -63,4 +63,6 @@ at_exit do
   Mpv::Process.stop(mpv_proc) unless mpv_proc.terminated?
   File.delete(Mpv::SOCKNAME) if File.exists?(Mpv::SOCKNAME)
 end
+
+Kemal.config.port = ENV.fetch("PORT", "3005").to_i
 Kemal.run
