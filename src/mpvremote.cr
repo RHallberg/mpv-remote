@@ -59,5 +59,8 @@ end
 
 mpv_proc = Mpv::Process.start
 
-at_exit{ Mpv::Process.stop(mpv_proc) unless mpv_proc.terminated? }
+at_exit do
+  Mpv::Process.stop(mpv_proc) unless mpv_proc.terminated?
+  File.delete(Mpv::SOCKNAME) if File.exists?(Mpv::SOCKNAME)
+end
 Kemal.run
