@@ -64,5 +64,11 @@ at_exit do
   File.delete(Mpv::SOCKNAME) if File.exists?(Mpv::SOCKNAME)
 end
 
+spawn do
+  mpv_proc.wait
+  STDERR.puts "mpv exited, shutting down"
+  exit 1
+end
+
 Kemal.config.port = ENV.fetch("PORT", "3005").to_i
 Kemal.run
