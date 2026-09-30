@@ -1,6 +1,7 @@
 require "kemal"
 require "json"
 require "uri"
+require "./mpv/mpv"
 
 MAIN_HTML = {{ read_file("public/index.html") }}
 
@@ -21,7 +22,7 @@ post "/loadurl" do |env|
     end
 
     puts "URL posted: #{uri}"
-    # TODO: Post uri to mpv through unix socket
+    Mpv::Client.loadfile(url)
     {result: "ok"}.to_json
 
   rescue URI::Error
@@ -30,20 +31,24 @@ post "/loadurl" do |env|
 end
 
 post "/play-pause" do
-  # TODO
-  puts "Play pause"
+  Mpv::Client.toggle_play_pause
 end
 
 post "/vol-up" do
-  # TODO
-  puts "Volume up"
+  Mpv::Client.change_volume(5)
 end
 
 post "/vol-down" do
-  # TODO
-  puts "Volume up"
+  Mpv::Client.change_volume(-5)
 end
 
+post "/seek-forward" do
+  Mpv::Client.seek(2)
+end
+
+post "/seek-backward" do
+  Mpv::Client.seek(-2)
+end
 
 private def respond_with_error(env, status_code : Int32, message : String)
   env.response.status_code = status_code
@@ -52,4 +57,7 @@ private def respond_with_error(env, status_code : Int32, message : String)
   {error: message}.to_json
 end
 
+mpv_proc = Mpv::Process.start
+
+at_exit{ Mpv::Process.stop(mpv_proc) unless mpv_proc.terminated? }
 Kemal.run

@@ -102,6 +102,11 @@
       <button id="volUp">Vol +</button>
     </div>
 
+    <div class="row">
+      <button id="seekBackward">Seek -</button>
+      <button id="seekForward">Seek +</button>
+    </div>
+
   </div>
 
   <script>
@@ -123,18 +128,23 @@
     });
 
     document.getElementById("playPause").addEventListener("click", async () => {
-      console.log("Play/Pause");
       const response = await fetch("/play-pause", { method: "POST" });
     });
 
     document.getElementById("volUp").addEventListener("click", async () => {
-      console.log("Volume up");
       const response = await fetch("/vol-up", { method: "POST" });
     });
 
     document.getElementById("volDown").addEventListener("click", async () => {
-      console.log("Volume down");
       const response = await fetch("/vol-down", { method: "POST" });
+    });
+
+    document.getElementById("seekForward").addEventListener("click", async () => {
+      const response = await fetch("/seek-forward", { method: "POST" });
+    });
+
+    document.getElementById("seekBackward").addEventListener("click", async () => {
+      const response = await fetch("/seek-backward", { method: "POST" });
     });
   </script>
 </body>
