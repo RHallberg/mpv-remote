@@ -15,7 +15,9 @@ module Mpv
           "--idle=yes",
           "--input-ipc-server=#{SOCKNAME}",
           "--ytdl=yes",
-          "--force-window=yes"
+          "--force-window=yes",
+          "--cursor-autohide=always",
+          "--fs"
         ],
         env: env
       )
