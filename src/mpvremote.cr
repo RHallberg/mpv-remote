@@ -50,6 +50,14 @@ post "/seek-backward" do
   Mpv::Client.seek(-2)
 end
 
+post "/show-progress" do
+  Mpv::Client.show_progress
+end
+
+post "/change-speed" do
+  Mpv::Client.cycle_speed
+end
+
 private def respond_with_error(env, status_code : Int32, message : String)
   env.response.status_code = status_code
   env.response.content_type = "application/json"

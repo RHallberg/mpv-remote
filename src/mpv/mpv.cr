@@ -17,7 +17,8 @@ module Mpv
           "--ytdl=yes",
           "--force-window=yes",
           "--cursor-autohide=always",
-          "--fs"
+          "--fs",
+          "--osd-duration=3000"
         ],
         env: env
       )
@@ -45,6 +46,14 @@ module Mpv
 
     def self.seek(percent : Int32)
       command(["seek", percent, "relative-percent"])
+    end
+
+    def self.show_progress
+      command(["show-progress"])
+    end
+
+    def self.cycle_speed
+      command(["cycle-values", "speed", "2", "4", "1"])
     end
 
     private def self.command(args : Array(String | Int32)) : String

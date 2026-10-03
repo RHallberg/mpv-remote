@@ -107,6 +107,14 @@
       <button id="seekForward">Seek +</button>
     </div>
 
+    <div class="row">
+      <button id="changeSpeed">Change speed</button>
+    </div>
+
+    <div class="row">
+      <button id="showProgress">Progress</button>
+    </div>
+
   </div>
 
   <script>
@@ -145,6 +153,14 @@
 
     document.getElementById("seekBackward").addEventListener("click", async () => {
       const response = await fetch("/seek-backward", { method: "POST" });
+    });
+
+    document.getElementById("changeSpeed").addEventListener("click", async () => {
+      const response = await fetch("/change-speed", { method: "POST" });
+    });
+
+    document.getElementById("showProgress").addEventListener("click", async () => {
+      const response = await fetch("/show-progress", { method: "POST" });
     });
   </script>
 </body>
