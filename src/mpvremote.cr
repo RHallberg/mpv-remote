@@ -9,6 +9,9 @@ MAIN_HTML = {{ read_file("public/index.html") }}
 FILES_HTML    = {{ read_file("public/files.html") }}
 STYLE_CSS     = {{ read_file("public/style.css") }}
 MANIFEST_JSON = {{ read_file("public/manifest.json") }}
+SW_JS         = {{ read_file("public/sw.js") }}
+ICON_192      = {{ read_file("public/icon-192.png") }}
+ICON_512      = {{ read_file("public/icon-512.png") }}
 
 get "/" do |env|
   env.response.content_type = "text/html"
@@ -46,6 +49,21 @@ end
 get "/manifest.json" do |env|
   env.response.content_type = "application/manifest+json"
   MANIFEST_JSON
+end
+
+get "/sw.js" do |env|
+  env.response.content_type = "text/javascript"
+  SW_JS
+end
+
+get "/icon-192.png" do |env|
+  env.response.content_type = "image/png"
+  ICON_192
+end
+
+get "/icon-512.png" do |env|
+  env.response.content_type = "image/png"
+  ICON_512
 end
 
 post "/loadurl" do |env|

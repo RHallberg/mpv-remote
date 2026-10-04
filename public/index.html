@@ -6,6 +6,8 @@
 
   <title>MPV remote</title>
   <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
 
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -80,6 +82,7 @@
       history.replaceState(null, "", window.location.pathname);
     }
 
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
   </script>
 </body>
 </html>
