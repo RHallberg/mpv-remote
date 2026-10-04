@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MPV remote - Files</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <a class="nav" href="/">&larr; Remote</a>
+
+    <div class="files" id="files"></div>
+  </div>
+
+  <script>
+    async function loadFile(file) {
+      const response = await fetch("/loadfile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ file })
+      });
+
+      console.log(await response.json());
+    }
+
+    async function listFiles() {
+      const container = document.getElementById("files");
+      const files = await (await fetch("/api/files")).json();
+
+      if (files.length === 0) {
+        container.textContent = "No files found";
+        return;
+      }
+
+      files.forEach((file) => {
+        const button = document.createElement("button");
+        button.textContent = file;
+        button.addEventListener("click", () => loadFile(file));
+        container.appendChild(button);
+      });
+    }
+
+    listFiles();
+  </script>
+</body>
+</html>

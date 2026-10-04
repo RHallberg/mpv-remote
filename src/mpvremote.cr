@@ -2,9 +2,11 @@ require "kemal"
 require "json"
 require "uri"
 require "./mpv/mpv"
+require "./files/files"
 
 MAIN_HTML = {{ read_file("public/index.html") }}
 
+FILES_HTML    = {{ read_file("public/files.html") }}
 STYLE_CSS     = {{ read_file("public/style.css") }}
 MANIFEST_JSON = {{ read_file("public/manifest.json") }}
 
@@ -13,9 +15,32 @@ get "/" do |env|
   MAIN_HTML
 end
 
+get "/files" do |env|
+  env.response.content_type = "text/html"
+  FILES_HTML
+end
+
 get "/style.css" do |env|
   env.response.content_type = "text/css"
   STYLE_CSS
+end
+
+get "/api/files" do |env|
+  env.response.content_type = "application/json"
+  Files.available.to_json
+end
+
+post "/loadfile" do |env|
+  data = JSON.parse(env.request.body.not_nil!.gets_to_end).as_h
+  name = data["file"]?.try(&.as_s?)
+
+  unless name && Files.available.includes?(name)
+    next respond_with_error(env, 404, "File not found")
+  end
+
+  puts "File requested: #{name}"
+  Mpv::Client.loadfile(Files.path(name))
+  {result: "ok"}.to_json
 end
 
 get "/manifest.json" do |env|
