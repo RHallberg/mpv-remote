@@ -5,85 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>MPV remote</title>
+  <link rel="manifest" href="/manifest.json">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 24px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 5px;
-      background: #333;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 0;
-      }
-
-      .container {
-        max-width: none;
-        min-height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        padding: 24px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
   <div class="container">
+    <a class="nav" href="/files">Files &rarr;</a>
 
     <form id="videoUrlForm">
       <input
@@ -94,27 +23,23 @@
     </form>
 
     <div class="row">
-      <button id="playPause">Play / Pause</button>
+      <button data-action="play-pause">Play / Pause</button>
     </div>
 
     <div class="row">
-      <button id="volDown">Vol -</button>
-      <button id="volUp">Vol +</button>
+      <button data-action="vol-down">Vol -</button>
+      <button data-action="vol-up">Vol +</button>
     </div>
 
     <div class="row">
-      <button id="seekBackward">Seek -</button>
-      <button id="seekForward">Seek +</button>
+      <button data-action="seek-backward">Seek -</button>
+      <button data-action="seek-forward">Seek +</button>
     </div>
 
   </div>
 
   <script>
-    document.getElementById("videoUrlForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const url = document.getElementById("input").value;
-
+    async function loadUrl(url) {
       const response = await fetch("/loadurl", {
         method: "POST",
         headers: {
@@ -125,27 +50,28 @@
 
       const data = await response.json();
       console.log(data);
+    }
+
+    document.getElementById("videoUrlForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      loadUrl(document.getElementById("input").value);
     });
 
-    document.getElementById("playPause").addEventListener("click", async () => {
-      const response = await fetch("/play-pause", { method: "POST" });
+    document.querySelectorAll("button[data-action]").forEach((button) => {
+      button.addEventListener("click", () => {
+        fetch(`/${button.dataset.action}`, { method: "POST" });
+      });
     });
 
-    document.getElementById("volUp").addEventListener("click", async () => {
-      const response = await fetch("/vol-up", { method: "POST" });
-    });
+    const params = new URLSearchParams(window.location.search);
+    const shared = params.get("url") || params.get("text");
+    if (shared) {
+      const url = shared.match(/https?:\/\/\S+/)?.[0] ?? shared;
+      document.getElementById("input").value = url;
+      loadUrl(url);
+      history.replaceState(null, "", window.location.pathname);
+    }
 
-    document.getElementById("volDown").addEventListener("click", async () => {
-      const response = await fetch("/vol-down", { method: "POST" });
-    });
-
-    document.getElementById("seekForward").addEventListener("click", async () => {
-      const response = await fetch("/seek-forward", { method: "POST" });
-    });
-
-    document.getElementById("seekBackward").addEventListener("click", async () => {
-      const response = await fetch("/seek-backward", { method: "POST" });
-    });
   </script>
 </body>
 </html>

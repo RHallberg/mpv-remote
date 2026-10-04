@@ -5,9 +5,22 @@ require "./mpv/mpv"
 
 MAIN_HTML = {{ read_file("public/index.html") }}
 
+STYLE_CSS     = {{ read_file("public/style.css") }}
+MANIFEST_JSON = {{ read_file("public/manifest.json") }}
+
 get "/" do |env|
   env.response.content_type = "text/html"
   MAIN_HTML
+end
+
+get "/style.css" do |env|
+  env.response.content_type = "text/css"
+  STYLE_CSS
+end
+
+get "/manifest.json" do |env|
+  env.response.content_type = "application/manifest+json"
+  MANIFEST_JSON
 end
 
 post "/loadurl" do |env|
@@ -70,5 +83,5 @@ spawn do
   exit 1
 end
 
-Kemal.config.port = ENV.fetch("PORT", "3005").to_i
+Kemal.config.port = ENV.fetch("MPVREMOTE_PORT", "3005").to_i
 Kemal.run
