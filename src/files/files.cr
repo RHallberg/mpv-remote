@@ -1,5 +1,5 @@
 module Files
-  DIR = File.expand_path(ENV.fetch("FILES_DIR", "files"))
+  DIR = File.expand_path(ENV.fetch("MPVREMOTE_FILES_DIR", "files"))
 
   # Only regular, non-hidden files directly inside DIR are exposed.
   def self.available : Array(String)
