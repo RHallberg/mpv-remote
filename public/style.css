@@ -65,8 +65,49 @@ button:hover {
   .container {
     max-width: none;
     min-height: 100vh;
+    min-height: 100dvh;
+    padding: 16px;
     border-radius: 0;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  input,
+  a.nav {
+    margin-bottom: 0;
+  }
+
+  a.nav {
+    padding: 8px 0;
+    font-size: 18px;
+  }
+
+  /* Control rows share the remaining height; buttons fill their row. */
+  .row {
+    flex: 1;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 0;
+  }
+
+  .row button {
+    flex: 1;
+    min-height: 72px;
+    border-radius: 14px;
+    font-size: 24px;
+    touch-action: manipulation;
+  }
+
+  button:active {
+    background: #777;
+  }
+
+  .files button {
+    padding: 20px 16px;
+    font-size: 20px;
+    border-radius: 12px;
   }
 }
 
