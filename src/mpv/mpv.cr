@@ -50,6 +50,8 @@ module Mpv
 
     def self.show_progress
       command(["show-progress"])
+      command(["expand-properties", "show-text", "${media-title}"])
+      command(["expand-properties", "show-text", "${media-title}\n ${time-pos}/${duration}"])
     end
 
     def self.cycle_speed
