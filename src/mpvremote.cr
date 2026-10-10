@@ -2,12 +2,68 @@ require "kemal"
 require "json"
 require "uri"
 require "./mpv/mpv"
+require "./files/files"
 
 MAIN_HTML = {{ read_file("public/index.html") }}
+
+FILES_HTML    = {{ read_file("public/files.html") }}
+STYLE_CSS     = {{ read_file("public/style.css") }}
+MANIFEST_JSON = {{ read_file("public/manifest.json") }}
+SW_JS         = {{ read_file("public/sw.js") }}
+ICON_192      = {{ read_file("public/icon-192.png") }}
+ICON_512      = {{ read_file("public/icon-512.png") }}
 
 get "/" do |env|
   env.response.content_type = "text/html"
   MAIN_HTML
+end
+
+get "/files" do |env|
+  env.response.content_type = "text/html"
+  FILES_HTML
+end
+
+get "/style.css" do |env|
+  env.response.content_type = "text/css"
+  STYLE_CSS
+end
+
+get "/api/files" do |env|
+  env.response.content_type = "application/json"
+  Files.available.to_json
+end
+
+post "/loadfile" do |env|
+  data = JSON.parse(env.request.body.not_nil!.gets_to_end).as_h
+  name = data["file"]?.try(&.as_s?)
+
+  unless name && Files.available.includes?(name)
+    next respond_with_error(env, 404, "File not found")
+  end
+
+  puts "File requested: #{name}"
+  Mpv::Client.loadfile(Files.path(name))
+  {result: "ok"}.to_json
+end
+
+get "/manifest.json" do |env|
+  env.response.content_type = "application/manifest+json"
+  MANIFEST_JSON
+end
+
+get "/sw.js" do |env|
+  env.response.content_type = "text/javascript"
+  SW_JS
+end
+
+get "/icon-192.png" do |env|
+  env.response.content_type = "image/png"
+  ICON_192
+end
+
+get "/icon-512.png" do |env|
+  env.response.content_type = "image/png"
+  ICON_512
 end
 
 post "/loadurl" do |env|
@@ -78,5 +134,5 @@ spawn do
   exit 1
 end
 
-Kemal.config.port = ENV.fetch("PORT", "3005").to_i
+Kemal.config.port = ENV.fetch("MPVREMOTE_PORT", "3005").to_i
 Kemal.run
