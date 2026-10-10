@@ -55,7 +55,7 @@ module Mpv
     end
 
     def self.cycle_speed
-      command(["cycle-values", "speed", "2", "4", "1"])
+      command(["cycle-values", "speed", "2", "1"])
     end
 
     private def self.command(args : Array(String | Int32)) : String
